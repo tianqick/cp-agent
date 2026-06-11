@@ -21,10 +21,9 @@ conda activate cp-agent
 # 安装依赖
 pip install anthropic openai pyyaml requests sentence-transformers faiss-cpu
 
-# 设置 API Key（选择一个供应商即可）
-export ANTHROPIC_API_KEY="your-key-here"      # Anthropic
-export OPENAI_API_KEY="your-key-here"         # OpenAI
-export DEEPSEEK_API_KEY="your-key-here"       # DeepSeek
+# 配置 API Key
+cp config.yaml.example config.yaml
+# 编辑 config.yaml，在 providers 下对应供应商的 env_key 字段填入你的 API Key
 ```
 
 ## 快速开始
