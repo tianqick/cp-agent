@@ -4,7 +4,7 @@
 
 ## 功能特性
 
-- 🤖 **AI 出题**：基于 Claude API 自动生成题面、标程、生成器、校验器、暴力解
+- 🤖 **AI 出题**：基于 LLM 自动生成题面、标程、生成器、校验器、暴力解（支持 DeepSeek、Claude、OpenAI 等多供应商）
 - 🔧 **自动化流水线**：编译 → 生成数据 → 校验 → 求解 → 对拍，全自动完成
 - 📦 **标准数据包**：兼容 Polygon/Hydro/HustOJ 目录结构
 - 🎯 **多难度支持**：Codeforces 分数制 800-3000，共 23 档难度
@@ -82,10 +82,10 @@ problems/<problem_name>/
 | 文件 | 说明 |
 |------|------|
 | `main.py` | CLI 入口，参数解析 |
-| `agent.py` | 核心 Agent，调用 Claude API 生成所有文件 |
+| `agent.py` | 核心 Agent，调用 LLM 生成所有文件 |
 | `pipeline.py` | 自动化流水线：编译、生成、校验、对拍 |
 | `config.py` | 全局配置、难度预设、算法主题映射 |
-| `config.yaml` | LLM 供应商、难度、算法主题配置 |
+| `config.yaml` | LLM 供应商、难度、算法主题配置（需从 `config.yaml.example` 复制） |
 | `testlib.h` | Codeforces 官方测试库（用于 generator/validator） |
 | `problem_db/` | 原题查重系统（爬虫 + 向量索引） |
 
