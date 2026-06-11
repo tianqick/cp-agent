@@ -1,0 +1,39 @@
+# ─── Python ───
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ─── IDE ───
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+
+# ─── Sensitive ───
+config.yaml
+.env
+.env.*
+
+# ─── Large data files (regenerate with problem_db) ───
+problem_data/problems.db
+problem_data/problems.faiss
+problem_data/problems.faiss.bak
+problem_data/problems.map.json
+problem_data/problems.map.json.bak
+
+# ─── Generated problems (optional, uncomment to exclude) ───
+# problems/
+
+# ─── Logs ───
+*.log
+
+# ─── Claude Code ───
+.claude/

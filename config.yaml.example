@@ -1,0 +1,158 @@
+# ============================================================
+# CP-Agent Configuration
+# ============================================================
+#
+# 复制此文件为 config.yaml 并填入你的配置：
+#   cp config.yaml.example config.yaml
+#
+# 【必填项说明】
+#
+# 整个配置文件只有两个顶层 key 是必须的：
+#   - nowModel   （当前默认使用的模型，格式：协议.供应商名，如 openai.deepseek）
+#   - providers  （至少保留一个 enabled: true 的供应商）
+#   - topics     （至少保留一个算法主题）
+#
+# 其余字段都有默认值，删掉不影响运行。
+#
+# ─── 添加新供应商 ──────────────────────────────────────────
+# 在 providers 下对应协议分类里加一个块即可：
+#
+#   providers:
+#     openai:                    ← 协议分类，固定两个："openai" 或 "anthropic"
+#       my_new_provider:         ← 供应商名，自定义，CLI 用 --provider my_new_provider
+#         enabled: true          ← 【必填】false 则 CLI 不可见
+#         base_url: "https://..."← 【必填】API 端点，必须是完整 URL
+#         default_model: "xxx"   ← 【必填】模型标识符
+#         api_key: "sk-xxx"      ← 【选填】直接写 API key（优先级最高）
+#         env_key: "MY_API_KEY"  ← 【选填】环境变量名（api_key 为空时才用这个）
+#                                  优先级：CLI --api-key > api_key > env_key
+#
+# ─── 协议说明 ──────────────────────────────────────────────
+#   "anthropic" → 使用 Anthropic SDK（_call_anthropic）
+#   "openai"    → 使用 OpenAI SDK（_call_openai_compatible）
+#                  所有 OpenAI 兼容的 API 都放这个分类下
+#                  （DeepSeek、Ollama、MiMo、Moonshot 等）
+# ============================================================
+
+# --- Active LLM ---
+# 默认使用的模型配置，格式为：协议.供应商名
+# 例如：openai.deepseek 表示使用 providers.openai.deepseek，并走 OpenAI-compatible 协议。
+nowModel: "openai.deepseek"
+
+# --- Paths ---
+# testlib.h 的位置，相对于项目根目录。一般不用改。
+testlib: "testlib.h"
+
+# --- Compiler ---
+# C++ 编译器和编译选项。可通过环境变量 CXX 覆盖编译器。
+cxx: "g++"
+cxx_flags:
+  - "-std=c++17"
+  - "-O2"
+  - "-Wall"
+  - "-Wextra"
+
+# --- Difficulty presets (Codeforces rating) ---
+# CF 分数只表示难度等级，不绑定具体算法或数据规模。
+# 算法由 --topic 指定，N/时间/内存由 LLM 根据具体题目自行决定。
+# 使用方式：--difficulty 1500
+difficulty:
+  800:  "一眼看出做法，纯实现，入门级"
+  900:  "基础实现，稍需思考"
+  1000: "简单贪心或模拟，适合新手"
+  1100: "基础数据结构或简单数学"
+  1200: "常见算法的直接应用"
+  1300: "需要基本算法知识，如二分、前缀和"
+  1400: "基础算法的组合运用"
+  1500: "中等难度，需要一定分析能力"
+  1600: "中等偏上，涉及常见算法技巧"
+  1700: "需要扎实的算法基础和实现能力"
+  1800: "较难，需要深入分析问题"
+  1900: "较难，算法选择和实现都有挑战"
+  2000: "困难，需要灵活运用多种算法"
+  2100: "困难，思维和实现双重挑战"
+  2200: "高难度，需要较强的建模能力"
+  2300: "高难度，算法组合复杂"
+  2400: "专家级，需要深入的算法理解"
+  2500: "大师级，需要创造性思维"
+  2600: "大师级，复杂构造或高级算法"
+  2700: "大师级，极高的分析和实现要求"
+  2800: "大师级，需要非常规思路"
+  2900: "大师级，接近人类出题极限"
+  3000: "大师级，极致难度"
+
+# --- Stress test ---
+# 对拍测试参数
+stress_iterations: 10000  # 对拍轮数
+stress_timeout_sec: 5     # 单组数据超时（秒）
+
+# --- LLM Providers ---
+# 结构：协议分类 → 供应商名 → 配置
+#
+# 每个供应商必须有以下字段：
+#   enabled       : true/false，是否启用
+#   base_url      : API 端点 URL
+#   default_model : 模型标识符
+#   api_key       : 【选填】直接写 API key 值（优先读这个）
+#   env_key       : 【选填】环境变量名（api_key 为空时 fallback 到环境变量）
+#
+providers:
+  # ── Anthropic 协议（Claude 系列） ──
+  anthropic:
+    anthropic:
+      enabled: true
+      base_url: "https://api.anthropic.com"
+      default_model: "claude-sonnet-4-20250514"
+      env_key: "ANTHROPIC_API_KEY"
+
+  # ── OpenAI 兼容协议（所有 OpenAI-API-compatible 的服务） ──
+  openai:
+    openai:
+      enabled: true
+      base_url: "https://api.openai.com/v1"
+      default_model: "gpt-4o"
+      env_key: "OPENAI_API_KEY"
+
+    deepseek:
+      enabled: true
+      base_url: "https://api.deepseek.com"
+      default_model: "deepseek-v4-pro"
+      env_key: "DEEPSEEK_API_KEY"
+
+    ollama:
+      enabled: true
+      base_url: "http://localhost:11434/v1"
+      default_model: "qwen2.5-coder:14b"
+      # 本地服务，不需要 key
+
+    mimo:
+      enabled: true
+      base_url: "https://token-plan-sgp.xiaomimimo.com/v1"
+      default_model: "mimo-v2.5-pro"
+      env_key: "MIMO_API_KEY"
+
+# --- Algorithm topics ---
+# 格式：key → 中英文描述
+# key 用于 CLI --topic 参数，如 --topic dp
+# 可自行增删，不影响框架运行
+topics:
+  dp:             "动态规划 (Dynamic Programming)"
+  tree:           "树上问题 (Tree Problems)"
+  graph:          "图论 (Graph Theory)"
+  greedy:         "贪心 (Greedy)"
+  binary_search:  "二分查找 (Binary Search)"
+  data_structure: "数据结构 (Data Structure)"
+  math:           "数学 (Mathematics)"
+  string:         "字符串 (String)"
+  geometry:       "计算几何 (Computational Geometry)"
+  bit:            "位运算 (Bit Manipulation)"
+  dsu:            "并查集 (Disjoint Set Union)"
+  segment_tree:   "线段树 (Segment Tree)"
+  fenwick:        "树状数组 (Fenwick Tree)"
+  bfs_dfs:        "搜索 (BFS/DFS)"
+  shortest_path:  "最短路 (Shortest Path)"
+  matching:       "匹配 (Matching)"
+  flow:           "网络流 (Network Flow)"
+  combinatorics:  "组合数学 (Combinatorics)"
+  number_theory:  "数论 (Number Theory)"
+  constructive:   "构造 (Constructive)"
