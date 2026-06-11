@@ -1,8 +1,0 @@
-{
-  "dimension": 384,
-  "ntotal": 24085,
-  "model_key": "mini",
-  "model_name": "paraphrase-multilingual-MiniLM-L12-v2",
-  "text_version": "v2_title_content_first",
-  "problem_count": 24085
-}

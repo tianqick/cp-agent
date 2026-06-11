@@ -21,6 +21,10 @@ conda activate cp-agent
 # 安装依赖
 pip install anthropic openai pyyaml requests sentence-transformers faiss-cpu
 
+# 下载题库数据（用于原题查重，可选）
+# 百度网盘: https://pan.baidu.com/s/1NhIJ05LKN9lA8-qUiRwaOQ?pwd=ghx2 提取码: ghx2
+# 下载后解压到项目根目录，得到 problem_data/ 文件夹
+
 # 配置 API Key
 cp config.yaml.example config.yaml
 # 编辑 config.yaml，在 providers 下对应供应商的 env_key 字段填入你的 API Key
